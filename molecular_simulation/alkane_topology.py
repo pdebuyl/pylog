@@ -3,7 +3,7 @@
 """Tool to generate angle and dihedral information for linear alkane chains."""
 
 __author__ = "Pierre de Buyl"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 print "This is %s %s by %s" % (__file__, __version__, __author__)
 
 import sys
