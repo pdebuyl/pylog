@@ -3,7 +3,7 @@
 """Tool to generate angle and dihedral information for linear alkane chains."""
 
 __author__ = "Pierre de Buyl"
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 print "This is %s %s by %s" % (__file__, __version__, __author__)
 
 import sys
@@ -20,7 +20,10 @@ nc=int(sys.argv[1])
 
 # Create graph with backbone C atoms
 G = nx.Graph()
-G.add_edges_from( [(i, i+1) for i in range(1, nc)] )
+if nc==1:
+    G.add_node(1)
+else:
+    G.add_edges_from( [(i, i+1) for i in range(1, nc)] )
 
 # Add 4-deg H atoms for each C
 H_idx=nc+1
