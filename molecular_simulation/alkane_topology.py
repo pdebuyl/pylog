@@ -3,7 +3,7 @@
 """Tool to generate angle and dihedral information for linear alkane chains."""
 
 __author__ = "Pierre de Buyl"
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 print "This is %s %s by %s" % (__file__, __version__, __author__)
 
 import sys
@@ -25,12 +25,17 @@ if nc==1:
 else:
     G.add_edges_from( [(i, i+1) for i in range(1, nc)] )
 
+for idx in G.nodes():
+    G.node[idx]['species']='C'
+
 # Add 4-deg H atoms for each C
 H_idx=nc+1
 for n_idx in G.nodes():
     deg = nx.degree(G, n_idx)
     print n_idx, deg
     for i in range(4-deg):
+        G.add_node(H_idx)
+        G.node[H_idx]['species']='H'
         G.add_edge(n_idx, H_idx)
         H_idx+=1
 
@@ -58,8 +63,8 @@ for n_idx in G.nodes():
 
 print("Angles"), len(angles)
 for angle in angles:
-    print angle
+    print angle, map(lambda i: G.node[i]['species'], angle)
 
 print("Dihedrals"), len(dihedrals)
 for dihedral in dihedrals:
-    print dihedral
+    print dihedral, map(lambda i: G.node[i]['species'], dihedral)
