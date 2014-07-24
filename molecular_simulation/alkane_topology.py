@@ -3,7 +3,7 @@
 """Tool to generate angle and dihedral information for linear alkane chains."""
 
 __author__ = "Pierre de Buyl"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 print "This is %s %s by %s" % (__file__, __version__, __author__)
 
 import sys
@@ -32,3 +32,31 @@ for n_idx in G.nodes():
         H_idx+=1
 
 print G.nodes()
+
+angles=set()
+dihedrals=set()
+for n_idx in G.nodes():
+    neighbors = nx.neighbors(G, n_idx)
+    for n in neighbors:
+        next_neighbors = nx.neighbors(G, n)
+        for nn in next_neighbors:
+            if n_idx<nn:
+                angles.add( (n_idx, n, nn) )
+            elif n_idx>nn:
+                angles.add( (nn, n, n_idx) )
+            next_next_neighbors = nx.neighbors(G, nn)
+            for nnn in next_next_neighbors:
+                if (n_idx!=n and n_idx!=nn and n_idx!=nnn and
+                    n!=nn and n!=nnn and nn!=nnn):
+                    if n_idx<nnn:
+                        dihedrals.add( (n_idx, n, nn, nnn) )
+                    elif n_idx>nnn:
+                        dihedrals.add( (nnn, nn, n, n_idx) )
+
+print("Angles"), len(angles)
+for angle in angles:
+    print angle
+
+print("Dihedrals"), len(dihedrals)
+for dihedral in dihedrals:
+    print dihedral
